@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "646845514515",
+    "firebase_url": "https://searchfood-4ff51.firebaseio.com",
+    "project_id": "searchfood-4ff51",
+    "storage_bucket": "searchfood-4ff51.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:646845514515:android:a26f5f70edc516cba4d0e6",
+        "android_client_info": {
+          "package_name": "com.nadu.foodsearch"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "646845514515-usjkcood45e8nfh74p4uev699dgm6l7r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nadu.foodsearch",
+            "certificate_hash": "2457bc341eeb0a127862f3478ad9f86f10288bb3"
+          }
+        },
+        {
+          "client_id": "646845514515-svu0f9rse55vn1eh49dsfforoiqpldpr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDycV57T9bllvm_xH3jfBwB9JGzRLpkgzg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "646845514515-svu0f9rse55vn1eh49dsfforoiqpldpr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

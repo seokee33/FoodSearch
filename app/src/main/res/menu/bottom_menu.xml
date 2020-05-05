@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/Menu_Map"
+        android:enabled="true"
+        android:icon="@drawable/map"
+        android:title="지도"/>
+
+    <item
+        android:id="@+id/Menu_List"
+        android:enabled="true"
+        android:icon="@drawable/food"
+        android:title="맛집"/>
+
+    <item
+        android:id="@+id/Menu_Setting"
+        android:enabled="true"
+        android:icon="@drawable/person"
+        android:title="설정"/>
+</menu>
