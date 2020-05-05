@@ -2,91 +2,52 @@ package com.nadu.foodsearch;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-
-
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.FragmentManager;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.InflateException;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+
 
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.RadioGroup;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.ResolvableApiException;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationAvailability;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResponse;
-import com.google.android.gms.location.LocationSettingsStatusCodes;
-import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.OnStreetViewPanoramaReadyCallback;
-import com.google.android.gms.maps.StreetViewPanorama;
-import com.google.android.gms.maps.StreetViewPanoramaFragment;
-import com.google.android.gms.maps.SupportStreetViewPanoramaFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.common.primitives.ImmutableDoubleArray;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.kyleduo.switchbutton.SwitchButton;
-import com.naver.maps.map.CameraAnimation;
-import com.naver.maps.map.CameraUpdate;
-import com.naver.maps.map.LocationTrackingMode;
-
-import com.naver.maps.map.NaverMap;
-import com.naver.maps.map.UiSettings;
-import com.naver.maps.map.overlay.Align;
-import com.naver.maps.map.overlay.InfoWindow;
-import com.naver.maps.map.util.FusedLocationSource;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import static android.app.Activity.RESULT_OK;
-import static android.content.Context.*;
-import static androidx.core.content.ContextCompat.getSystemService;
+import static android.content.Context.LOCATION_SERVICE;
+
+
 public class Menu_Map extends Fragment implements OnMapReadyCallback, GoogleMap.OnMyLocationChangeListener {
     private View view;
     private String TAG = "Menu_Map";
@@ -98,10 +59,7 @@ public class Menu_Map extends Fragment implements OnMapReadyCallback, GoogleMap.
     private MapFragment mapFragment;
     private GoogleMap googleMap;
     private ArrayList<Marker> shop_Markers = new ArrayList<>();
-    private EditText et_Search;
     private LatLng searchLatLng;
-    private Button btn_Search;
-    private
     boolean setMyLocationEnabled_check = false;
     //////////////////////////
     private GpsTracker gpsTracker;
@@ -131,26 +89,46 @@ public class Menu_Map extends Fragment implements OnMapReadyCallback, GoogleMap.
         }
 
 
-        et_Search = view.findViewById(R.id.et_Map_Serarch);
-        btn_Search = view.findViewById(R.id.btn_Map_Search);
-        btn_Search.setOnClickListener(v -> {
-            String address = et_Search.getText().toString();
-            if (address.length()<=0) {
-                return;
-            } else {
-                GeoCoderGetAddress geoCoderGetAddress = new GeoCoderGetAddress();
+        EditText et_Search = (EditText) view.findViewById(R.id.et_Map_Search);
+        et_Search.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                switch (keyCode){
+                    case KeyEvent.KEYCODE_ENTER:
+                        String address = et_Search.getText().toString();
+                        GeoCoderGetAddress geoCoderGetAddress = new GeoCoderGetAddress();
+                        geoCoderGetAddress = getAddressFromGeoCoder(address);
+                        searchLatLng = new LatLng(geoCoderGetAddress.getX(), geoCoderGetAddress.getY());
+                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(searchLatLng, 16));
+                        break;
+                }
+                return true;
+            }
+        });
+        Button btn_Search = (Button)view.findViewById(R.id.btn_Map_Search);
+        btn_Search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String address = et_Search.getText().toString();
+                if (address.length()<=0) {
+                    return;
+                } else {
+                    GeoCoderGetAddress geoCoderGetAddress = new GeoCoderGetAddress();
 
-                geoCoderGetAddress = getAddressFromGeoCoder(address);
-                searchLatLng = new LatLng(geoCoderGetAddress.getX(), geoCoderGetAddress.getY());
-                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(searchLatLng, 16));
+                    geoCoderGetAddress = getAddressFromGeoCoder(address);
+                    searchLatLng = new LatLng(geoCoderGetAddress.getX(), geoCoderGetAddress.getY());
+                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(searchLatLng, 16));
+                }
             }
         });
 
-
         Button btn_Map_Change = view.findViewById(R.id.btn_Map_Change);
-        btn_Map_Change.setOnClickListener(v -> {
-            Intent intent = new Intent(getContext(),streetMap.class);
-            startActivity(intent);
+        btn_Map_Change.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(),streetMap.class);
+                startActivity(intent);
+            }
         });
 
         fm = getActivity().getFragmentManager();
@@ -179,29 +157,33 @@ public class Menu_Map extends Fragment implements OnMapReadyCallback, GoogleMap.
         googleMap.setBuildingsEnabled(true);
         googleMap.setMyLocationEnabled(setMyLocationEnabled_check);
 
+
         db = FirebaseFirestore.getInstance();
         db.collection("FoodList")
                 .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            Marker marker = new Marker();
-                            marker.setLat((double) document.get("lat"));
-                            marker.setLng((double) document.get("lng"));
-                            marker.setShop_Name((String) document.get("tv_Shop_Name"));
-                            marker.setShop_Food((String) document.get("tv_Shop_Food"));
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Marker marker = new Marker();
+                                marker.setLat((double) document.get("lat"));
+                                marker.setLng((double) document.get("lng"));
+                                marker.setShop_Name((String) document.get("tv_Shop_Name"));
+                                marker.setShop_Food((String) document.get("tv_Shop_Food"));
 
-                            shop_Markers.add(marker);
-                            MarkerOptions markerOptions = new MarkerOptions();
-                            markerOptions.title(marker.getShop_Name())
-                                    .snippet(marker.getShop_Food())
-                                    .position(new LatLng(marker.getLat(),marker.getLng()));
-                            googleMap.addMarker(markerOptions);
+                                shop_Markers.add(marker);
+                                MarkerOptions markerOptions = new MarkerOptions();
+                                markerOptions.title(marker.getShop_Name())
+                                        .snippet(marker.getShop_Food())
+                                        .position(new LatLng(marker.getLat(),marker.getLng()));
+                                googleMap.addMarker(markerOptions);
 
-                            Log.i(TAG,"이름 : "+marker.getShop_Name()+" 음식 : "+marker.getShop_Food()+" 위도 : "+marker.getLat()+" 경도 : "+marker.getLng());
+                                Log.i(TAG,"이름 : "+marker.getShop_Name()+" 음식 : "+marker.getShop_Food()+" 위도 : "+marker.getLat()+" 경도 : "+marker.getLng());
+                            }
+                        } else {
+                            Log.w(TAG, "Error getting documents.", task.getException());
                         }
-                    } else {
-                        Log.w(TAG, "Error getting documents.", task.getException());
                     }
                 });
     }
@@ -787,114 +769,4 @@ public class Menu_Map extends Fragment implements OnMapReadyCallback, GoogleMap.
 
 
 
-//public class Menu_Map extends Fragment implements OnMapReadyCallback {
-//    private View view;
-//    private String TAG = "Menu_Map";
-//
-//    private ArrayList<Marker> arrayList;
-//    private FirebaseFirestore db;
-//
-//    private FragmentManager fm;
-//    private MapFragment mapFragment;
-//
-//
-//    //현위치
-//    private FusedLocationSource locationSource;
-//    private NaverMap naverMap;
-//    private InfoWindow infoWindow;
-//    private static final int ACCESS_LOCATION_PERMISSION_REQUEST_CODE = 100;
-//
-//    @Nullable
-//    @Override
-//    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-//        view = inflater.inflate(R.layout.activity_menu__map, container, false);
-//
-//        fm = getFragmentManager();
-//        mapFragment = (MapFragment)fm.findFragmentById(R.id.map_Naver);
-//        if (mapFragment == null) {
-//            mapFragment = MapFragment.newInstance();
-//            fm.beginTransaction().add(R.id.map_Naver, mapFragment).commit();
-//        }
-//
-//        mapFragment.getMapAsync(this);
-//
-//        return view;
-//    }
-//
-//
-//    @Override
-//    public void onMapReady(@NonNull final NaverMap naverMap) {
-//        this.naverMap = naverMap;
-//        locationSource = new FusedLocationSource(getActivity(),ACCESS_LOCATION_PERMISSION_REQUEST_CODE);
-//        naverMap.setLocationSource(locationSource);
-//        UiSettings uiSettings = naverMap.getUiSettings();
-//        uiSettings.setLocationButtonEnabled(true);
-//
-//        LatLng initialPosition = new LatLng(35.857420, 128.485549);
-//        CameraUpdate cameraUpdate = CameraUpdate.scrollTo(initialPosition).animate(CameraAnimation.Fly);
-//        naverMap.moveCamera(cameraUpdate);
-//        naverMap.setMinZoom(5.0);
-//
-//        db = FirebaseFirestore.getInstance();
-//        db.collection("FoodList")
-//                .get()
-//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                        if (task.isSuccessful()) {
-//                            for (QueryDocumentSnapshot document : task.getResult()) {
-//                                com.naver.maps.map.overlay.Marker marker = new com.naver.maps.map.overlay.Marker();
-//                                marker.setPosition(new LatLng((double)document.get("lat"),(double)document.get("lng")));
-//                                marker.setMap(naverMap);
-//                                marker.setCaptionText((String) document.get("tv_Shop_Name"));
-//                                marker.setCaptionAligns(Align.Top);
-//                                marker.setWidth(50);
-//                                marker.setHeight(80);
-//                                Log.d(TAG, document.getId() + " => " + document.getData());
-//                            }
-//                        } else {
-//                            Log.w(TAG, "Error getting documents.", task.getException());
-//                        }
-//                    }
-//                });
-//
-//
-//
-//
-//    }
-//
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-//
-//        switch (requestCode){
-//            case ACCESS_LOCATION_PERMISSION_REQUEST_CODE:
-//                locationSource.onRequestPermissionsResult(requestCode,permissions,grantResults);
-//                return;
-//        }
-//    }
-//
-//    public void dbRead(){
-//        db.collection("FoodList")
-//                .get()
-//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                        if (task.isSuccessful()) {
-//                            for (QueryDocumentSnapshot document : task.getResult()) {
-//                                com.naver.maps.map.overlay.Marker marker = new com.naver.maps.map.overlay.Marker();
-//                                marker.setPosition(new LatLng((double)document.get("lat"),(double)document.get("lng")));
-//                                marker.setMap(naverMap);
-//                                marker.setCaptionText((String) document.get("tv_Shop_Name"));
-//                                marker.setCaptionAligns(Align.Top);
-//                                marker.setWidth(50);
-//                                marker.setHeight(80);
-//                                Log.d(TAG, document.getId() + " => " + document.getData());
-//                            }
-//                        } else {
-//                            Log.w(TAG, "Error getting documents.", task.getException());
-//                        }
-//                    }
-//                });
-//    }
-//}
+
