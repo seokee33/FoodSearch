@@ -85,6 +85,7 @@ public class Menu_List extends Fragment {
                                 foodList.setTv_Shop_Lat((double)document.get("lat"));
                                 foodList.setTv_Shop_Lng((double)document.get("lng"));
                                 foodList.setTv_Shop_Number((String)document.get("tv_Shop_Number"));
+                                foodList.setShop_No(Integer.parseInt(String.valueOf(document.get("Shop_No"))));
                                 arrayListAll.add(foodList);
                                 switch (foodList.getTv_Shop_Food()){
                                     case "중식":

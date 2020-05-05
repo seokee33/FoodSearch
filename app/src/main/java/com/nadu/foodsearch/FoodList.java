@@ -1,6 +1,8 @@
 package com.nadu.foodsearch;
 
-public class FoodList {
+import java.io.Serializable;
+
+public class FoodList implements Serializable {
     private String iv_Shop_Profile;
     private String tv_Shop_Name;
     private String tv_Shop_Food;
@@ -10,7 +12,17 @@ public class FoodList {
     private double tv_Shop_Lat;
     private double tv_Shop_Lng;
 
+    private int shop_No;
+
     public FoodList() {}
+
+    public int getShop_No() {
+        return shop_No;
+    }
+
+    public void setShop_No(int shop_No) {
+        this.shop_No = shop_No;
+    }
 
     public String getIv_Shop_Profile() {
         return iv_Shop_Profile;

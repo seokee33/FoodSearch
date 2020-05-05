@@ -19,7 +19,7 @@ import java.util.ArrayList;
 public class FoodListAdapter extends RecyclerView.Adapter<FoodListAdapter.CustomViewHolder> {
 
     private ArrayList<FoodList> arrayList;
-    private ArrayList<FoodList> intentArrayList;
+    FoodList shopinfo = new FoodList();
     private Context context;
 
     public FoodListAdapter(ArrayList<FoodList> arrayList, Context context) {
@@ -56,7 +56,6 @@ public class FoodListAdapter extends RecyclerView.Adapter<FoodListAdapter.Custom
         TextView tv_Shop_Name;
         TextView tv_Shop_Food;
         TextView tv_Shop_Time;
-
         public CustomViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -66,14 +65,15 @@ public class FoodListAdapter extends RecyclerView.Adapter<FoodListAdapter.Custom
             this.tv_Shop_Time = itemView.findViewById(R.id.tv_Shop_Time);
 
 
-//            itemView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Intent intent = new Intent(itemView.getContext(),ShopInfo.class);
-//                    intent.putExtra("ShopInfo",);
-//                    itemView.getContext().startActivity(intent);
-//                }
-//            });
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    shopinfo = arrayList.get(getAdapterPosition());
+                    Intent intent = new Intent(itemView.getContext(),ShopInfo.class);
+                    intent.putExtra("ShopInfo",shopinfo);
+                    itemView.getContext().startActivity(intent);
+                }
+            });
 
         }
     }
