@@ -33,18 +33,19 @@
         android:id="@+id/et_Map_Search"
         android:layout_width="340dp"
         android:layout_height="45dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginBottom="660dp"
         android:background="@drawable/searchbox"
         android:ellipsize="end"
         android:hint="검색"
-        android:singleLine="true"
         android:paddingLeft="20dp"
         android:paddingRight="50dp"
+        android:singleLine="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.098"
-        app:layout_constraintStart_toStartOf="@+id/map_NormalView"
-        app:layout_constraintTop_toTopOf="@+id/map_NormalView"
-        app:layout_constraintVertical_bias="0.015" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/map_NormalView" />
 
     <Button
         android:id="@+id/btn_Map_Search"

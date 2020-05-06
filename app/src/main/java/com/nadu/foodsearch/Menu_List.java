@@ -5,30 +5,23 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-
 import java.util.ArrayList;
 
 public class Menu_List extends Fragment {
@@ -83,7 +76,6 @@ public class Menu_List extends Fragment {
                 });
 
             et_SearchShop = view.findViewById(R.id.et_SearchShop);
-
             view.findViewById(R.id.btn_All).setOnClickListener(onClickListener);
             view.findViewById(R.id.btn_Korean).setOnClickListener(onClickListener);
             view.findViewById(R.id.btn_Yangsik).setOnClickListener(onClickListener);
@@ -117,6 +109,7 @@ public class Menu_List extends Fragment {
                 case R.id.btn_Search:
                     shop = et_SearchShop.getText().toString();
                     readDB(searchFood(arrayListAll,et_SearchShop.getText().toString()));
+                    et_SearchShop.setHint("검색");
                     break;
                 case R.id.btn_Location:
                     Intent intent = new Intent(getActivity(),ShopMyLocation.class);
