@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -34,11 +36,6 @@ public class Menu_List extends Fragment {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private ArrayList<FoodList> arrayListAll;
-    private ArrayList<FoodList> arrayListKorean;
-    private ArrayList<FoodList> arrayListChina;
-    private ArrayList<FoodList> arrayListYangsik;
-    private ArrayList<FoodList> arrayListJapan;
-    private ArrayList<FoodList> arrayListSearchShop;
     private RecyclerView.LayoutManager layoutManager;
 
     private FirebaseFirestore db;
@@ -57,18 +54,8 @@ public class Menu_List extends Fragment {
         layoutManager = new LinearLayoutManager(getContext());
 
         db = FirebaseFirestore.getInstance();
-
-        et_SearchShop = view.findViewById(R.id.et_SearchShop);
-
-        arrayListSearchShop = new ArrayList<>();
-
-
         recyclerView.setLayoutManager(layoutManager);
         arrayListAll = new ArrayList<>();
-        arrayListKorean = new ArrayList<>();
-        arrayListYangsik = new ArrayList<>();
-        arrayListChina = new ArrayList<>();
-        arrayListJapan = new ArrayList<>();
 
         db.collection("FoodList")
                 .get()
@@ -87,30 +74,15 @@ public class Menu_List extends Fragment {
                                 foodList.setTv_Shop_Number((String)document.get("tv_Shop_Number"));
                                 foodList.setShop_No(Integer.parseInt(String.valueOf(document.get("Shop_No"))));
                                 arrayListAll.add(foodList);
-                                switch (foodList.getTv_Shop_Food()){
-                                    case "중식":
-                                        arrayListChina.add(foodList);
-                                        break;
-                                    case "한식":
-                                        arrayListKorean.add(foodList);
-                                        break;
-                                    case "양식":
-                                        arrayListYangsik.add(foodList);
-                                        break;
-                                    case "일식":
-                                        arrayListJapan.add(foodList);
-                                        break;
-                                }
-                                Log.d(TAG, document.getId() + " => " + document.getData());
                             }
-                                adapter = new FoodListAdapter(arrayListAll, getContext());
-                                recyclerView.setAdapter(adapter);
-                                adapter.notifyDataSetChanged();
+                            readDB(arrayListAll);
                         } else {
                             Log.w(TAG, "Error getting documents.", task.getException());
                         }
                     }
                 });
+
+            et_SearchShop = view.findViewById(R.id.et_SearchShop);
 
             view.findViewById(R.id.btn_All).setOnClickListener(onClickListener);
             view.findViewById(R.id.btn_Korean).setOnClickListener(onClickListener);
@@ -118,6 +90,7 @@ public class Menu_List extends Fragment {
             view.findViewById(R.id.btn_Japan).setOnClickListener(onClickListener);
             view.findViewById(R.id.btn_China).setOnClickListener(onClickListener);
             view.findViewById(R.id.btn_Search).setOnClickListener(onClickListener);
+            view.findViewById(R.id.btn_Location).setOnClickListener(onClickListener);
         return view;
         
     }
@@ -130,34 +103,39 @@ public class Menu_List extends Fragment {
                     readDB(arrayListAll);
                     break;
                 case R.id.btn_Korean:
-                    readDB(arrayListKorean);
+                    readDB(readFood(arrayListAll,"한식"));
                     break;
                 case R.id.btn_China:
-                    readDB(arrayListChina);
+                    readDB(readFood(arrayListAll,"중식"));
                     break;
                 case R.id.btn_Japan:
-                    readDB(arrayListJapan);
+                    readDB(readFood(arrayListAll,"일식"));
                     break;
                 case R.id.btn_Yangsik:
-                    readDB(arrayListYangsik);
+                    readDB(readFood(arrayListAll,"양식"));
                     break;
                 case R.id.btn_Search:
                     shop = et_SearchShop.getText().toString();
-                    arrayListSearchShop = searchFood(shop);
-                    readDB(arrayListSearchShop);
+                    readDB(searchFood(arrayListAll,et_SearchShop.getText().toString()));
                     break;
+                case R.id.btn_Location:
+                    Intent intent = new Intent(getActivity(),ShopMyLocation.class);
+                    startActivity(intent);
+
             }
         }
     };
 
-    private ArrayList<FoodList> searchFood(String Shop){
-        ArrayList<FoodList> arrayList = null;
+    private ArrayList<FoodList> searchFood(ArrayList<FoodList> arrayListAll ,String Shop){
+        ArrayList<FoodList> arrayList = new ArrayList<>();
         for(FoodList foodList : arrayListAll){
             if (foodList.getTv_Shop_Name().equals(shop)){
                 arrayList.add(foodList);
-            }else{
-                return arrayListAll;
             }
+        }
+        if(arrayList.size()<=0){
+            Toast.makeText(getContext(),"일치하는 가게가 없습니다.",Toast.LENGTH_SHORT).show();
+            return arrayListAll;
         }
         return arrayList;
     }
@@ -168,4 +146,13 @@ public class Menu_List extends Fragment {
         adapter.notifyDataSetChanged();
     }
 
+    private ArrayList<FoodList> readFood(ArrayList<FoodList> arrayList, String food){
+        ArrayList<FoodList> foodListsArr = new ArrayList<>();
+        for(FoodList foodList : arrayList){
+            if(foodList.getTv_Shop_Food().equals(food)){
+                foodListsArr.add(foodList);
+            }
+        }
+        return foodListsArr;
+    }
 }
