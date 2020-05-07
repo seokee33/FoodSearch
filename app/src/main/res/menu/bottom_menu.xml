@@ -14,8 +14,15 @@
         android:title="맛집"/>
 
     <item
+        android:id="@+id/Menu_Good"
+        android:enabled="true"
+        android:icon="@drawable/good"
+        android:title="추천"/>
+    
+    <item
         android:id="@+id/Menu_Setting"
         android:enabled="true"
         android:icon="@drawable/person"
         android:title="설정"/>
+
 </menu>

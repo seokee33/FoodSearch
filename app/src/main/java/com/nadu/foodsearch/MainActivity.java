@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private Menu_List menu_list;
     private Menu_Map menu_map;
     private Menu_Setting menu_setting;
+    private Menu_good menu_good;
 
     private BackPressHandler backPressHandler = new BackPressHandler(this);
     @Override
@@ -46,9 +47,13 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.Menu_List:
                         setFrag(1);
                         break;
-                    case R.id.Menu_Setting:
+                    case R.id.Menu_Good:
                         setFrag(2);
                         break;
+                    case R.id.Menu_Setting:
+                        setFrag(3);
+                        break;
+
                 }
                 return true;
             }
@@ -57,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
         menu_list = new Menu_List();
         menu_map = new Menu_Map();
         menu_setting = new Menu_Setting();
+        menu_good = new Menu_good();
         setFrag(0);
     }
     private void setFrag(int n){
@@ -72,6 +78,10 @@ public class MainActivity extends AppCompatActivity {
                 ft.commit();
                 break;
             case 2:
+                ft.replace(R.id.Menu_frame,menu_good);
+                ft.commit();
+                break;
+            case 3:
                 ft.replace(R.id.Menu_frame,menu_setting);
                 ft.commit();
                 break;
