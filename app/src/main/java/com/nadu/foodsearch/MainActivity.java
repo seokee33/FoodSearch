@@ -53,7 +53,6 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.Menu_Setting:
                         setFrag(3);
                         break;
-
                 }
                 return true;
             }
@@ -87,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
     }
+
     private void startToast(String msg){
         Toast.makeText(this,msg,Toast.LENGTH_SHORT).show();
     }
