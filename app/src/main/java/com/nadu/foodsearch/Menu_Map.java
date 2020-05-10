@@ -122,14 +122,6 @@ public class Menu_Map extends Fragment implements OnMapReadyCallback, GoogleMap.
             }
         });
 
-        Button btn_Map_Change = view.findViewById(R.id.btn_Map_Change);
-        btn_Map_Change.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(),streetMap.class);
-                startActivity(intent);
-            }
-        });
 
         fm = getActivity().getFragmentManager();
         mapFragment = (MapFragment)fm.findFragmentById(R.id.map_NormalView);

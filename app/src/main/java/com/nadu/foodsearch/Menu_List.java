@@ -22,9 +22,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Menu_List extends Fragment {
+public class Menu_List extends Fragment implements Serializable {
     private View view;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
@@ -37,6 +39,8 @@ public class Menu_List extends Fragment {
 
     private EditText et_SearchShop;
     private String shop;
+
+    private Fragment fragment;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -83,6 +87,7 @@ public class Menu_List extends Fragment {
             view.findViewById(R.id.btn_China).setOnClickListener(onClickListener);
             view.findViewById(R.id.btn_Search).setOnClickListener(onClickListener);
             view.findViewById(R.id.btn_Location).setOnClickListener(onClickListener);
+
         return view;
         
     }

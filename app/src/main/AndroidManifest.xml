@@ -16,7 +16,6 @@
         android:theme="@style/AppTheme">
         <activity android:name=".Menu_good"></activity>
         <activity android:name=".ShopMyLocation" />
-        <activity android:name=".streetMap" />
         <activity android:name=".ShopInfo" />
         <activity
             android:name=".UserInit"

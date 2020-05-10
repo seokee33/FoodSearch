@@ -17,6 +17,8 @@ import android.widget.Button;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.ArrayList;
+
 public class Menu_good extends Fragment {
     private View view;
     private FragmentPagerAdapter fragmentPagerAdapter;
@@ -24,7 +26,6 @@ public class Menu_good extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.activity_menu_good, container, false);
-
         ViewPager viewPager = view.findViewById(R.id.vp_good);
         fragmentPagerAdapter = new ViewPagerAdapterGood(getActivity().getSupportFragmentManager());
 
