@@ -119,11 +119,14 @@ public class Menu_List extends Fragment implements Serializable {
         Gson gson = new Gson();
 
         shopList = gson.fromJson(response, ShopList.class);
-        arrayListAll = shopList.shopListResult.foodList;
 
-        for(FoodList foodList : arrayListAll){
-            Log.i(TAG,foodList.getShopname());
+        for(FoodList foodList : shopList.shopListResult.foodList){
+            Log.i(TAG,"이름 : "+foodList.getShopname());
+            arrayListAll.add(foodList);
         }
+        readDB(arrayListAll);
+
+
     }
 
     private ArrayList<FoodList> searchFood(ArrayList<FoodList> arrayListAll ,String Shop){
