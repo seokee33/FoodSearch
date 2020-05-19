@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.textclassifier.TextClassification;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -38,11 +37,11 @@ public class FoodListAdapter extends RecyclerView.Adapter<FoodListAdapter.Custom
     @Override
     public void onBindViewHolder(@NonNull FoodListAdapter.CustomViewHolder holder, int position) {
         Glide.with(holder.iv_Shop_Profile.getContext())
-                .load(arrayList.get(position).getIv_Shop_Profile())
+                .load(arrayList.get(position).getShopprofile())
                 .into(holder.iv_Shop_Profile);
-        holder.tv_Shop_Name.setText(arrayList.get(position).getTv_Shop_Name());
-        holder.tv_Shop_Food.setText(arrayList.get(position).getTv_Shop_Food());
-        holder.tv_Shop_Time.setText(arrayList.get(position).getTv_Shop_Time());
+        holder.tv_Shop_Name.setText(arrayList.get(position).getShopname());
+        //holder.tv_Shop_Food.setText(arrayList.get(position).getShopfood());
+        holder.tv_Shop_Time.setText(arrayList.get(position).getShoptime());
     }
 
     @Override
@@ -54,14 +53,14 @@ public class FoodListAdapter extends RecyclerView.Adapter<FoodListAdapter.Custom
 
         ImageView iv_Shop_Profile;
         TextView tv_Shop_Name;
-        TextView tv_Shop_Food;
+        //TextView tv_Shop_Food;
         TextView tv_Shop_Time;
         public CustomViewHolder(@NonNull View itemView) {
             super(itemView);
 
             this.iv_Shop_Profile = itemView.findViewById(R.id.iv_Shop_Profile);
             this.tv_Shop_Name = itemView.findViewById(R.id.tv_Shop_Name);
-            this.tv_Shop_Food = itemView.findViewById(R.id.tv_Shop_Food);
+            //this.tv_Shop_Food = itemView.findViewById(R.id.tv_Shop_Food);
             this.tv_Shop_Time = itemView.findViewById(R.id.tv_Shop_Time);
 
 
@@ -69,7 +68,7 @@ public class FoodListAdapter extends RecyclerView.Adapter<FoodListAdapter.Custom
                 @Override
                 public void onClick(View v) {
                     shopinfo = arrayList.get(getAdapterPosition());
-                    Intent intent = new Intent(itemView.getContext(),ShopInfo.class);
+                    Intent intent = new Intent(itemView.getContext(), ShopInformation.class);
                     intent.putExtra("ShopInfo",shopinfo);
                     itemView.getContext().startActivity(intent);
                 }

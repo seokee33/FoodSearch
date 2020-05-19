@@ -16,7 +16,7 @@ import org.w3c.dom.Text;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class ShopInfo extends AppCompatActivity  {
+public class ShopInformation extends AppCompatActivity  {
 
 
     private FoodList shopInfo = new FoodList();
@@ -36,16 +36,16 @@ public class ShopInfo extends AppCompatActivity  {
         shopInfo = (FoodList) getIntent().getSerializableExtra("ShopInfo");
         iv_shopInfo_Profile = findViewById(R.id.iv_ShopInfo_Profile);
         Glide.with(this)
-                .load(shopInfo.getIv_Shop_Profile())
+                .load(shopInfo.getShopprofile())
                 .into(iv_shopInfo_Profile);
 
         tv_ShopInfo_Name = findViewById(R.id.tv_ShopInfo_Name);
-        tv_ShopInfo_Name.setText(shopInfo.getTv_Shop_Name());
+        tv_ShopInfo_Name.setText(shopInfo.getShopname());
 
         tv_ShopInfo_Number = findViewById(R.id.tv_ShopInfo_Number);
-        tv_ShopInfo_Number.setText("Tel : "+shopInfo.getTv_Shop_Number());
+        tv_ShopInfo_Number.setText("Tel : "+shopInfo.getShopnumber());
 
         tv_ShopInfo_Time = findViewById(R.id.tv_ShopInfo_Time);
-        tv_ShopInfo_Time.setText("Time : "+shopInfo.getTv_Shop_Time());
+        tv_ShopInfo_Time.setText("Time : "+shopInfo.getShoptime());
     }
 }
