@@ -63,6 +63,7 @@ public class ShopMyLocation extends FragmentActivity implements OnMapReadyCallba
 
             checkRunTimePermission();
         }
+
         EditText et_Search = (EditText) findViewById(R.id.et_Shop_Map_Search);
         et_Search.setOnKeyListener(new View.OnKeyListener() {
             @Override

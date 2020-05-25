@@ -39,7 +39,7 @@ public class ViewPagerAdapterGood extends FragmentPagerAdapter {
             case 0:
                 return "랜덤 추천";
             case 1:
-                return "검색 추천";
+                return "분위기 추천";
             default:
                 return null;
         }
